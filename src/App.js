@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Moon, Sun1 } from "iconsax-react";
 import "./App.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import ForgotPassword from "./pages/ForgotPassword";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -61,6 +63,13 @@ function App() {
           <Route path="/welcome" element={<Welcome />} />
           <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
+
+        <ToastContainer
+          position="top-right"
+          autoClose={2500}
+          theme="dark"
+        />
+
       </div>
     </BrowserRouter>
   );

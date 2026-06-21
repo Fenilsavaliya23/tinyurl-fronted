@@ -1,28 +1,36 @@
 import React from 'react'
 import { useState } from 'react';
 import { getUrlStats } from "../../Api/urlApi";
+import { toast } from "react-toastify";
 // import "./StatisticsSection.css";
 
-function StatisticsSection() {
+function StatisticsSection({ creatingUrl, setCreatingUrl }) {
 
     const [checkCode, setCheckCode] = useState("");
     const [stats, setStats] = useState(null);
 
     const handleStats = async () => {
         try {
-          const response = await getUrlStats(checkCode);
-    
-          setStats(response);
+            setCreatingUrl(true);
+
+            const response = await getUrlStats(checkCode);
+        
+            setStats(response);
         } 
         catch (error) {
-          console.error(error);
-    
-          if (error.response?.data?.message) {
-            alert(error.response.data.message);
-          } 
-          else {
-            alert("Statistics not found");
-          }
+            console.error(error);
+        
+            if (error.response?.data?.message) {
+                // alert(error.response.data.message);
+                toast.error(error.response.data.message);
+            } 
+            else {
+                // alert("Statistics not found");
+                toast.error("Statistics not found");
+            }
+        }
+        finally {
+            setCreatingUrl(false);
         }
     };
 
@@ -44,8 +52,8 @@ function StatisticsSection() {
 
                 <div className="statistics-button">
 
-                    <button className="auth-button" type="button" onClick={handleStats}>
-                        Get Statistics
+                    <button className="auth-button primary-btn" type="button" onClick={handleStats} disabled={creatingUrl}>
+                        {creatingUrl ? "Fetching..." : "Get Statistics"}
                     </button>
 
                 </div>

@@ -1,9 +1,10 @@
 import React from 'react'
 import { shortenUrl } from "../../Api/urlApi";
+import { toast } from "react-toastify";
 import { useState } from "react";
 
 
-const CreateUrlForm = ({ loadMyURLs, loadDashboardStats }) => {
+const CreateUrlForm = ({ loadMyURLs, loadDashboardStats, creatingUrl, setCreatingUrl }) => {
   
   const [longUrl, setLongUrl] = useState("");
   const [customAlias, setCustomAlias] = useState("");
@@ -15,11 +16,15 @@ const CreateUrlForm = ({ loadMyURLs, loadDashboardStats }) => {
     e.preventDefault();
   
       if (!longUrl.trim()) {
-        alert("Please enter URL");
+        // alert("Please enter URL");
+        toast.error("Please enter URL");
         return;
       }
   
       try {
+
+        setCreatingUrl(true);
+
         const currentUser = JSON.parse(sessionStorage.getItem("currentUser"));
   
         const response = await shortenUrl({
@@ -44,22 +49,31 @@ const CreateUrlForm = ({ loadMyURLs, loadDashboardStats }) => {
         console.error(error);
   
         if (error.response?.data?.message) {
-          alert(error.response.data.message);
+          // alert(error.response.data.message);
+          toast.error(error.response.data.message);
         } 
         else {
-          alert("Failed to create short URL");
+          // alert("Failed to create short URL");
+          toast.error("Failed to create short URL");
         }
       }
+
+      finally {
+        setCreatingUrl(false);
+      }
+
   };
   
   const copyToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(shortUrl);
   
-        alert("Short URL copied");
+        // alert("Short URL copied");
+        toast.success("Short URL copied to clipboard!");
       } 
       catch {
-        alert("Copy failed");
+        // alert("Copy failed");
+        toast.error("Failed to copy!");
       }
   };
 
@@ -93,8 +107,8 @@ const CreateUrlForm = ({ loadMyURLs, loadDashboardStats }) => {
             onChange={(e) => setHoursToExpire(e.target.value)}
         />
 
-        <button className="auth-button" type="submit">
-            Shorten URL
+        <button className="auth-button primary-btn" type="submit" disabled={creatingUrl}>
+          {creatingUrl ? "Creating..." : "Create Short URL"}
         </button>
 
       </form>

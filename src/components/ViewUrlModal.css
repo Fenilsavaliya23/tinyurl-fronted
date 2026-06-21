@@ -1,0 +1,111 @@
+.modal-card{
+    width:450px;
+    background:#07142b;
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:20px;
+    padding:25px;
+    color:white;
+    box-shadow:
+        0 20px 60px rgba(0,0,0,0.5),
+        0 0 30px rgba(37,99,235,0.25);
+    animation: modalPop 0.35s ease;
+}
+
+.short-url-preview, 
+.original-url-preview,
+.alias-preview,
+.clicks-preview,
+.created-date-preview
+{
+     background:#0f1f3d;
+    border-radius:12px;
+    padding:12px 14px;
+    min-height:48px;
+    display:flex;
+    align-items:center;
+    font-size:14px;
+    line-height:1.4;
+    word-break:break-word;
+    overflow-wrap:anywhere;
+}
+
+.modal-card h2{
+    font-size:32px;
+    font-weight:700;
+    margin-bottom:20px;
+}
+
+.modal-actions{
+    display:flex;
+    gap:12px;
+    margin-top:24px;
+}
+
+.modal-actions button{
+    flex:1;
+    height:48px;
+
+    border:none;
+    border-radius:12px;
+
+    font-size:14px;
+    font-weight:600;
+
+    cursor:pointer;
+    transition:all .25s ease;
+}
+
+.modal-cancel-btn{
+    background:#475569;
+    color:white;
+}
+
+.modal-cancel-btn:hover{
+    background:#334155;
+    transform:translateY(-2px);
+}
+
+.modal-copy-btn {
+    background-color: #4CAF50; /* Green */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.modal-copy-btn:hover {
+    background-color: #45a049;
+    translate: 0 -2px;
+}
+
+.modal-open-btn{
+    background-color: #2563eb; /* Blue */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.modal-section {
+    margin-bottom: 18px;
+}
+
+.modal-open-btn:hover {
+    background-color: #1e40af;
+    translate: 0 -2px;
+}
+
+
+@keyframes modalPop{
+    from{
+        opacity:0;
+        transform:scale(.85);
+    }
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
+}

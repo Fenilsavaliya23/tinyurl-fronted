@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Lock, Sms } from "iconsax-react";
 import AuthInput from "../components/AuthInput";
 import { loginUser } from "../Api/AuthApi";
+import { toast } from "react-toastify";
 
 function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -43,7 +44,8 @@ function Login() {
 
       sessionStorage.setItem("jwtToken", response.token);
 
-      alert(response.message);
+      // alert(response.message);
+      toast.success(response.message);
 
       navigate("/welcome");
 
@@ -53,9 +55,11 @@ function Login() {
       console.error(error);
 
       if (error.response?.data?.message) {
-        alert(error.response.data.message);
+        // alert(error.response.data.message);
+        toast.error(error.response.data.message);
       } else {
-        alert("Login failed");
+        // alert("Login failed");
+        toast.error("Login failed");
       }
 
     }

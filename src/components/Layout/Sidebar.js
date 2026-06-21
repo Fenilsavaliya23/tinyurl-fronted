@@ -1,5 +1,6 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
+import { Home, Chart, Link21, Logout } from 'iconsax-react';
 
 const Sidebar = () => {
   
@@ -28,15 +29,39 @@ const Sidebar = () => {
 
         <nav className="sidebar-menu">
           
-          <button>Dashboard</button>
+          <button className="sidebar-item active">
+            
+            <Home size="20" variant="Bold" color="currentColor" /> 
+            
+            <span>Dashboard</span>
+            
+          </button>
 
-          <button>Analytics</button>
+          <button className="sidebar-item">
+            
+            <Chart size="20" variant="Bold" color="currentColor" /> 
+            
+            <span>Analytics</span>
+          
+          </button>
 
-          <button>My URLs</button>
+          <button className="sidebar-item">
+          
+            <Link21 size="20" variant="Bold" color="currentColor" /> 
+          
+            <span>My URLs</span>
+          
+          </button>
 
         </nav>
 
-        <button onClick={handleLogout} className="sidebar-logout">Logout</button>
+        <button onClick={handleLogout} className="sidebar-logout">
+        
+          <Logout size="20" variant="Bold" color="currentColor" /> 
+        
+          <span>Logout</span>
+        
+        </button>
 
     </aside>
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { Sms } from "iconsax-react";
 import AuthInput from "../components/AuthInput";
 
@@ -31,12 +32,14 @@ function ForgotPassword() {
     );
 
     if (!account) {
-      alert("No account found with this email");
+      // alert("No account found with this email");
+      toast.error("No account found with this email");
       navigate("/signup");
       return;
     }
 
-    alert("Password reset successfully");
+    // alert("Password reset successfully");
+    toast.success("Password reset link sent to your email");
     sessionStorage.setItem(
       "currentUser",
       JSON.stringify({ name: account.name, email: account.email }),

@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Lock, Sms, User } from "iconsax-react";
 import AuthInput from "../components/AuthInput";
 import { signupUser } from "../Api/AuthApi";
+import { toast } from "react-toastify";
 
 const specialCharacterPattern = /[^A-Za-z0-9]/;
 
@@ -93,7 +94,8 @@ function Signup() {
     if (Object.keys(newErrors).length) return;
 
     if (passwordStrength.score < 3) {
-      alert("Make password strong");
+      // alert("Make password strong");
+      toast.error("Make password strong");
       return;
     }
 
@@ -104,7 +106,8 @@ function Signup() {
           password: form.password,
         });
 
-        alert(response.message);
+        // alert(response.message);
+        toast.success(response.message);
 
         navigate("/login");
     }
@@ -112,9 +115,11 @@ function Signup() {
         console.error(error);
 
         if (error.response?.data?.message) {
-          alert(error.response.data.message);
+          // alert(error.response.data.message);
+          toast.error(error.response.data.message);
         } else {
-          alert("Signup failed");
+          // alert("Signup failed");
+          toast.error("Signup failed");
         }
     }
 

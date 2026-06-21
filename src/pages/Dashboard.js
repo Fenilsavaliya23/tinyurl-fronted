@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { getMyUrls, deleteUrl, updateAlias, getDashboardStats, getQrCodeUrl, getQrCode } from "../Api/urlApi";
 import "./Dashboard.css";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import AnalyticsCards from "../components/Dashboard/AnalyticsCards";
 import UrlTable from "../components/Dashboard/UrlTable";
 import QrModel from "../components/Dashboard/QrModel";
@@ -18,10 +19,14 @@ function Dashboard() {
   // const [shortUrl, setShortUrl] = useState("");
   // const [selectedQrCodeUrl, setSelectedQrCodeUrl] = useState("");
 
+  const [creatingUrl, setCreatingUrl] = useState(false);
+  const [loadingStats, setLoadingStats] = useState(false);
+
   const [checkCode, setCheckCode] = useState("");
 
   const [dashboardStats, setDashboardStats] = useState(null);
 
+  const [searchTerm, setSearchTerm] = useState("");
 
   const [showQrCode, setShowQrCode] = useState(false);
 
@@ -48,7 +53,8 @@ function Dashboard() {
     }
     catch (error) {
       console.error(error);
-      alert("Failed to load dashboard statistics");
+      // alert("Failed to load dashboard statistics");
+      toast.error("Failed to load dashboard statistics");
     }
 
   } 
@@ -67,6 +73,15 @@ function Dashboard() {
     }
   };
   
+  const filterResults = (urls, searchTerm) => {
+    
+    if (!searchTerm) return urls;
+
+    return urls.filter(url =>
+      url.originalUrl.toLowerCase().includes(searchTerm.toLowerCase()) 
+      //  || url.shortUrl.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }
 
 
   return (
@@ -82,18 +97,36 @@ function Dashboard() {
 
         <div className="dashboard-grid">
 
-          <CreateUrlForm loadMyURLs={loadMyURLs} loadDashboardStats={loadDashboardStats} />
+          <CreateUrlForm loadMyURLs={loadMyURLs} loadDashboardStats={loadDashboardStats} creatingUrl={creatingUrl} setCreatingUrl={setCreatingUrl} />
         
-         <StatisticsSection />
+         <StatisticsSection creatingUrl={creatingUrl} setCreatingUrl={setCreatingUrl} />
         
         </div>
 
-        <div className="url-section">
+        <div className="urls-card">
 
-            <h2>My URLs</h2>
+            <div className="urls-header">
 
+               <h2>My URLs</h2>
+
+               <span className="urls-count">
+
+                {filterResults(myURLs, searchTerm).length} {filterResults(myURLs, searchTerm).length === 1 ? "URL" : "URLs"}
+
+               </span>
+
+            </div>
+
+            <div className="urls-search">
+
+                <input type="text" placeholder="Search Urls...." 
+                    className="search-input" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} 
+                />
+
+            </div>            
+      
             <UrlTable
-                myURLs={myURLs}
+                myURLs={filterResults(myURLs, searchTerm)}
                 loadMyURLs={loadMyURLs}
                 loadDashboardStats={loadDashboardStats}
                 showQrCode={showQrCode}
