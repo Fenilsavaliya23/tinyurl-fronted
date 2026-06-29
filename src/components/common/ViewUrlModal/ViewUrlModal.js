@@ -8,6 +8,8 @@ import { copyToClipboard } from "../../../utils/helper.js";
 const ViewUrlModal = ({ isOpen, onClose, title="Details", description="View Complete Information", data=[] }) => {
 
     if (!isOpen) return null;
+
+    const shortUrl = data.find(item => item.label === "Short URL: ")?.value || "";
         
     return (
        
@@ -20,7 +22,7 @@ const ViewUrlModal = ({ isOpen, onClose, title="Details", description="View Comp
                 <>
                     <button type="button" className="modal-cancel-btn" onClick={onClose}>Close</button>
                     <button type="button" className="modal-copy-btn" 
-                            onClick={() => copyToClipboard(data.shortUrl || "", "URL copied to clipboard successfully!")}
+                            onClick={() => copyToClipboard(shortUrl, "URL copied to clipboard successfully!")}
                     >
                         Copy URL
                     </button>
