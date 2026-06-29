@@ -86,7 +86,7 @@ function EditAliasModal({ isOpen, onClose, onSave,
             <div className="edit-alias-modal">
 
                 <div className="edit-alias-icon">
-                    <Edit2 size="72" color="currentColor" variant="Bulk" />
+                    <Edit2 size="56" color="currentColor" variant="Bulk" />
                 </div>    
 
                 <p className="edit-alias-description">

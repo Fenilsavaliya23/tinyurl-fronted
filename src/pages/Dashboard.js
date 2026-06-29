@@ -9,6 +9,7 @@ import CreateUrlForm from "../components/Dashboard/CreateUrlForm";
 import StatisticsSection from "../components/Dashboard/StatisticsSection";
 // import Navbar from "../components/Layout/Navbar";
 import Sidebar from "../components/Layout/Sidebar";
+import { MenuBoard } from "iconsax-react";
 
 function Dashboard() {
 
@@ -258,6 +259,22 @@ function Dashboard() {
 
       {sidebarOpen && (<div className="sidebar-overlay" onClick={() => setSidebarOpen(false)} /> )}
 
+        
+      {!sidebarOpen && (
+          <button
+              className="sidebar-toggle"
+              onClick={() => setSidebarOpen(true)}
+              aria-label="Open Sidebar"
+          >
+              <MenuBoard
+                  size={24}
+                  variant="Bold"
+                  color="currentColor"
+              />
+          </button>
+      )}
+      
+
       <Sidebar 
           isOpen={sidebarOpen} 
           isCollapsed={sidebarCollapsed}
@@ -265,6 +282,7 @@ function Dashboard() {
           activeSection={activeSection}
           onClose={() => setSidebarOpen(false)} 
       />
+
 
       <main className="dashboard-container">
 

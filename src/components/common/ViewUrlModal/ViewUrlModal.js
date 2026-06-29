@@ -15,7 +15,7 @@ const ViewUrlModal = ({ isOpen, onClose, title="Details", description="View Comp
             isOpen={isOpen}
             onClose={onClose}
             title={title}
-            width={620}
+            width={560}
             footer={
                 <>
                     <button type="button" className="modal-cancel-btn" onClick={onClose}>Close</button>
@@ -32,7 +32,7 @@ const ViewUrlModal = ({ isOpen, onClose, title="Details", description="View Comp
             <div className="view-modal">
 
                 <div className="view-icon">
-                    <Link21 size="72" color="currentColor" variant="Bulk" />
+                    <Link21 size="56" color="currentColor" variant="Bulk" />
                 </div>
 
                 <p className="view-description">{description}</p>

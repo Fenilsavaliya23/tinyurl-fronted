@@ -7,10 +7,10 @@
 
 .qr-icon{
 
-    width:82px;
-    height:82px;
+    width: 70px;
+    height: 70px;
 
-    margin:0 auto 28px;
+    margin:0 auto 20px;
 
     display:flex;
     justify-content:center;
@@ -18,9 +18,9 @@
 
     border-radius:50%;
 
-    background:rgba(37,99,235,.12);
+    background: var(--primary-bg);
 
-    border:1px solid rgba(37,99,235,.25);
+    border:1px solid var(--primary-color);
 
     color:var(--primary-color);
 
@@ -36,7 +36,7 @@
 
     font-size:16px;
 
-    line-height:1.6;
+    line-height:1.4;
 
 }
 

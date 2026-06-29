@@ -33,7 +33,7 @@ function DeleteConfirmModal({
         <div className="delete-modal">
 
             <div className="delete-icon-wrapper">
-                <Trash size="72" color="currentColor" variant="Bulk" />
+                <Trash size="56" color="currentColor" variant="Bulk" />
             </div>
 
             <p className="delete-message">{message}</p>

@@ -185,7 +185,7 @@ function UrlManagement() {
 
                         <span>Total Clicks</span>
 
-                        <h2 className="click-count">{totalClicks}</h2>
+                        <h2>{totalClicks}</h2>
 
                         <p>Across all URLs</p>
 

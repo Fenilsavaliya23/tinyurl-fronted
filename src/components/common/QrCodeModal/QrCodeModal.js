@@ -64,7 +64,7 @@ function QrCodeModal({
                 <div className="qr-icon">
 
                     <ScanBarcode
-                        size="72"
+                        size="56"
                         variant="Bulk"
                         color="currentColor"
                     />
