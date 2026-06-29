@@ -53,4 +53,4 @@ function AuthInput({
   );
 }
 
-export default AuthInput;
+export default React.memo(AuthInput);

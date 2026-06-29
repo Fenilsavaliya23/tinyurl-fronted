@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Sms } from "iconsax-react";
-import AuthInput from "../components/AuthInput";
+import AuthInput from "../components/common/AuthInput/AuthInput.js";
 
 function ForgotPassword() {
   const [email, setEmail] = useState("");

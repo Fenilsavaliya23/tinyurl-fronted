@@ -1,18 +1,18 @@
 import React from 'react'
 import { deleteUrl, updateAlias, getQrCode } from '../../Api/urlApi';
-import EditAliasModal from '../EditAliasModal';
-import DeleteConfirmModal from '../DeleteConfirmModal';
-import ViewUrlModal from '../ViewUrlModal';
-import { Eye, Copy, Edit2, Barcode, Trash } from "iconsax-react";
+import EditAliasModal from '../common/EditAliasModal/EditAliasModal.js';
+import DeleteConfirmModal from '../common/DeleteConfirmModal/DeleteConfirmModal.js';
+import ViewUrlModal from '../common/ViewUrlModal/ViewUrlModal.js';
+import QrCodeModal from '../common/QrCodeModal/QrCodeModal.js';
+import DataTable from '../common/DataTable/DataTable.js';
+import { createUrlTableColumns } from './columns/urlTableColumns.js';
 import { toast } from "react-toastify";
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
+import { formatDate, shortenUrl } from '../../utils/formatters.js';
+import { MESSAGES, TABLE_MESSAGES } from '../../utils/constants.js';
 // import { BASE_URL } from "../Api/AuthApi";
 
 const UrlTable = ({ myURLs, loadMyURLs, loadDashboardStats, showQrCode, setShowQrCode, qrImageUrl, setQrImageUrl }) => {
-
-    // const [myURLs, setMyURLs] = useState([]);
-    // const [showQrCode, setShowQrCode] = useState(false);
-    // const [qrImageUrl, setQrImageUrl] = useState("");
 
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [selectedUrl, setSelectedUrl] = useState(null);
@@ -28,11 +28,11 @@ const UrlTable = ({ myURLs, loadMyURLs, loadDashboardStats, showQrCode, setShowQ
             await navigator.clipboard.writeText(url);
     
             // alert("Copied Successfully");
-            toast.success("Copied to clipboard!");
+            toast.success(MESSAGES.COPY_SUCCESS);
         }
         catch {
             // alert("Copy Failed");
-            toast.error("Failed to copy!");
+            toast.error(MESSAGES.COPY_ERROR);
         }
     
     };
@@ -43,6 +43,9 @@ const UrlTable = ({ myURLs, loadMyURLs, loadDashboardStats, showQrCode, setShowQ
         const shortCode = shortUrl.split("/").pop();
 
         try{
+
+            setSelectedUrl(shortUrl);
+
             const blob = await getQrCode(shortCode);
 
             const imageUrl = URL.createObjectURL(blob);
@@ -56,40 +59,18 @@ const UrlTable = ({ myURLs, loadMyURLs, loadDashboardStats, showQrCode, setShowQ
             // alert(error.response?.data?.message || "Failed to fetch QR code");
             toast.error(error.response?.data?.message || "Failed to fetch QR code");
         }
-
-        // setSelectedQrCodeUrl(getQrCodeUrl(shortCode));
-
-        // setShowQrCode(true);
   
-  }  
-
-
-//   const handleDelete = async (shortUrl) => {
-
-//     // const shortCode = shortUrl.split("/").pop();
-
-//     if(!window.confirm("Are you sure you want to delete this URL?")) return;
-
-//     try {
-//         await deleteUrl(selectedUrl.shortCode);
-
-//         toast.success("URL deleted successfully");
-
-//         await loadMyURLs();
-
-//         await loadDashboardStats();
-//     }
-//     catch (error) {
-//       console.error(error);
-//     //   alert(`error.response?.data?.message || "Failed to delete URL"`);
-//         toast.error(error.response?.data?.message || "Failed to delete URL");
-//     }
-//   }
+    }  
 
     const openEditModal = (url) => {
         setSelectedUrl(url);
         setIsEditModalOpen(true);
     };
+
+    const closeEditModal = () => {
+        setSelectedUrl(null);
+        setIsEditModalOpen(false);
+    }
 
     const openDeleteModal = (url) => {
         setDeleteTarget(url);
@@ -109,7 +90,7 @@ const UrlTable = ({ myURLs, loadMyURLs, loadDashboardStats, showQrCode, setShowQ
 
             await deleteUrl(deleteTarget.shortCode);
 
-            toast.success("URL deleted successfully");
+            toast.success(MESSAGES.DELETE_SUCCESS);
 
             setIsDeleteModalOpen(false);
 
@@ -119,24 +100,14 @@ const UrlTable = ({ myURLs, loadMyURLs, loadDashboardStats, showQrCode, setShowQ
 
         } catch (error) {
 
-            console.error(error);
-
-            toast.error(error.response?.data?.message || "Failed to delete URL");
+            toast.error(error.response?.data?.message || MESSAGES.NETWORK_ERROR);
 
         }
     };
     
     const handleUpdateAlias = async (newAlias) => {
         
-        console.log("Selected URL =", selectedUrl);
-        console.log("Short Code =", selectedUrl?.shortCode);
-        
-      if(!newAlias.trim()) return;
-
-        // const shortCode = shortUrl.split("/").pop();
-        
-        // const newAlias = prompt("Enter New Alias");
-
+        if(!newAlias) return;
 
         try{
 
@@ -144,20 +115,18 @@ const UrlTable = ({ myURLs, loadMyURLs, loadDashboardStats, showQrCode, setShowQ
 
             await updateAlias(selectedUrl.shortCode, newAlias);
 
-            setIsEditModalOpen(false);
-
             //   alert("Alias updated successfully");
-                toast.success("Alias updated successfully");
+            toast.success(`Alias ${MESSAGES.UPDATE_SUCCESS}`);
 
             await loadMyURLs();
 
             await loadDashboardStats();
+
+            closeEditModal();   
         }
         catch (error) {
-        console.error(error);
-
         //   alert(error.response?.data?.message || "Failed to update alias");
-            toast.error(error.response?.data?.message || "Failed to update alias");
+            toast.error(error.response?.data?.message || MESSAGES.NETWORK_ERROR);
         }
   }
 
@@ -167,147 +136,66 @@ const UrlTable = ({ myURLs, loadMyURLs, loadDashboardStats, showQrCode, setShowQ
 //      ) 
 //   }
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return " " + date.toLocaleTimeString("en-IN", 
-            { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true, timeZone: 'Asia/Kolkata', day: "numeric", month: "short", year:"numeric" });
-  }
+    const columns = createUrlTableColumns({
+            handleView,
+            copyUrl,
+            openEditModal,
+            handleShowQr,
+            openDeleteModal,
+            formatDate,
+            shortenUrl
+    });        
 
-  const shortenUrl = (url) => {
-    if(url.length > 60){
-        return url.substring(0, 60);
-    }
-    return url;
-  }
-  
   return (
+        
+        <>
+            <EditAliasModal
+                isOpen={isEditModalOpen}
+                onClose={closeEditModal}
+                onSave={handleUpdateAlias}
+                title="Edit Alias"
+                initialValue={selectedUrl?.shortCode}
+            />
 
-      <table className='url-table'>
-          
-          <EditAliasModal
-              isOpen={isEditModalOpen}
-              onClose={() => setIsEditModalOpen(false)}
-              onSave={handleUpdateAlias}
-              currentAlias={selectedUrl?.shortCode}
-              shortUrl={selectedUrl?.shortUrl}
-              originalURL={selectedUrl?.originalUrl}
-          />
+            <DeleteConfirmModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={handleDeleteConfirm}
+                title="Delete URL"
+                message="Are you sure you want to permanently delete this URL?"
+                details={[]}
+                confirmText="Delete URL"
+            />
 
-          <DeleteConfirmModal
-            isOpen={isDeleteModalOpen}
-            onClose={() => setIsDeleteModalOpen(false)}
-            onConfirm={handleDeleteConfirm}
-            originalUrl={deleteTarget?.originalUrl}
-            shortUrl={deleteTarget?.shortUrl}
-        />
+            <ViewUrlModal
+                isOpen={isViewModalOpen}
+                onClose={() => setIsViewModalOpen(false)}
+                title="URL Details"
+                description="View Complete Information"
+                data={[
+                    { label: "Original URL: ", value: selectedUrl?.originalUrl },
+                    { label: "Short URL: ", value: selectedUrl?.shortUrl },
+                    { label: "Clicks: ", value: selectedUrl?.clickCount },
+                    { label: "Created: ", value: selectedUrl?.createdDate ? formatDate(selectedUrl.createdDate) : "" },
+                ]}
+            />
 
-        <ViewUrlModal
-            isOpen={isViewModalOpen}
-            onClose={() => setIsViewModalOpen(false)}
-            url={selectedUrl}
-        />
+            <QrCodeModal
+                isOpen={showQrCode}
+                onClose={() => setShowQrCode(false)}
+                qrImageUrl={qrImageUrl}
+                shortUrl={selectedUrl?.shortUrl}
 
-          <thead>
+            />
 
-              <tr>
-
-                <th>Original Url</th>
-
-                <th>Clicks</th>
-
-                <th>Created</th>
-
-                <th>Actions</th>
-
-              </tr>
-
-          </thead>
-
-          <tbody>
-
-              {myURLs.length===0 ? (
-
-                    <tr>
-
-                    <td colSpan="4" className="no-urls">No URLs Found</td>
-
-                    </tr>
-
-                ) : ( myURLs.map((url) => (
-
-                    <tr key={url.shortUrl} >
-
-                        <td title={url.originalUrl}> {shortenUrl(url.originalUrl)} </td>
-
-                        <td> {url.clickCount} </td>
-
-                        <td> {formatDate(url.createdDate)} </td>
-
-                        <td>
-
-                                <div className='action-buttons'>
-                                    
-                                    <button className="action-btn open-btn" onClick={() => handleView(url) }>
-                                        <Eye
-                                            size="18"
-                                            variant="Bold"
-                                            color="currentColor"
-                                        />
-                                    </button>
-
-                                    <button className="action-btn copy-btn" onClick={() =>
-                                        copyUrl(url.shortUrl)}
-                                    >
-                                        <Copy
-                                            size="18"
-                                            variant="Bold"
-                                            color="currentColor"
-                                        />
-                                    </button>
-
-                                    <button className="action-btn edit-btn" onClick={() =>
-                                        openEditModal(url)}
-                                    >
-                                        <Edit2
-                                            size="18"
-                                            variant="Bold"
-                                            color="currentColor"
-                                        />
-                                    </button>
-
-                                    <button className="action-btn qr-btn" onClick={() => 
-                                        handleShowQr(url.shortUrl)}
-                                    >
-                                        <Barcode
-                                            size="18"
-                                            variant="Bold"
-                                            color="currentColor"
-                                        />
-                                    </button>
-
-                                    <button className="action-btn delete-btn" onClick={() => 
-                                        openDeleteModal(url)}
-                                    >
-                                        <Trash
-                                            size="18"
-                                            variant="Bold"
-                                            color="currentColor"
-                                        />
-                                    </button>
-
-                                </div>
-
-                        </td>
-
-                    </tr>
-
-                )))
-              }
-
-          </tbody>
-
-      </table>
-
+            <DataTable
+                columns={columns}
+                data={myURLs}
+                rowKey="shortCode"
+                emptyMessage={TABLE_MESSAGES.NO_URLS}
+            />
+        
+        </>
 
   )
 }

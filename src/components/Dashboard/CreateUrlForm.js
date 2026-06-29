@@ -2,7 +2,8 @@ import React from 'react'
 import { shortenUrl } from "../../Api/urlApi";
 import { toast } from "react-toastify";
 import { useState } from "react";
-
+import { copyToClipboard } from "../../utils/helper";
+import { Gift, CloseCircle } from "iconsax-react"
 
 const CreateUrlForm = ({ loadMyURLs, loadDashboardStats, creatingUrl, setCreatingUrl }) => {
   
@@ -10,6 +11,7 @@ const CreateUrlForm = ({ loadMyURLs, loadDashboardStats, creatingUrl, setCreatin
   const [customAlias, setCustomAlias] = useState("");
   const [hoursToExpire, setHoursToExpire] = useState("");
   const [shortUrl, setShortUrl] = useState("");
+  const [showResult, setShowResult] = useState(false);
   
   const handleSubmit = async (e) => {
     
@@ -38,6 +40,7 @@ const CreateUrlForm = ({ loadMyURLs, loadDashboardStats, creatingUrl, setCreatin
         });
   
         setShortUrl(response.shortUrl);
+        setShowResult(true);
   
         await loadMyURLs();
   
@@ -64,73 +67,112 @@ const CreateUrlForm = ({ loadMyURLs, loadDashboardStats, creatingUrl, setCreatin
 
   };
   
-  const copyToClipboard = async () => {
-    try {
-      await navigator.clipboard.writeText(shortUrl);
-  
-        // alert("Short URL copied");
-        toast.success("Short URL copied to clipboard!");
-      } 
-      catch {
-        // alert("Copy failed");
-        toast.error("Failed to copy!");
-      }
-  };
 
   return (
     <>
     
       <form onSubmit={handleSubmit} className="create-url-form">
 
-        <input
-            className="dashboard-input"
-            type="text"
-            placeholder="Enter Long URL"
-            value={longUrl}
-            onChange={(e) => setLongUrl(e.target.value)}
-            required
-        />
+        <div className='form-group'>
+          
+            <label htmlFor="longUrl">Long URL</label>
+          
+            <input
+                className="dashboard-input"
+                type="text"
+                placeholder="Enter Long URL"
+                value={longUrl}
+                onChange={(e) => setLongUrl(e.target.value)}
+                required
+                id="longUrl"
+            />
 
-        <input
-            className="dashboard-input"
-            type="text"
-            placeholder="Custom Alias (Optional)"
-            value={customAlias}
-            onChange={(e) => setCustomAlias(e.target.value)}
-        />
+        </div>    
 
-        <input
-            type="number"
-            className="dashboard-input"
-            placeholder="Expiry Hours (Optional)"
-            value={hoursToExpire}
-            onChange={(e) => setHoursToExpire(e.target.value)}
-        />
+        <div className='form-group'>
+          
+            <label htmlFor="customAlias">Custom Alias (Optional)</label>
+          
+            <input
+                className="dashboard-input"
+                type="text"
+                placeholder="Custom Alias (Optional)"
+                value={customAlias}
+                onChange={(e) => setCustomAlias(e.target.value)}
+                id="customAlias"
+            />
 
-        <button className="auth-button primary-btn" type="submit" disabled={creatingUrl}>
-          {creatingUrl ? "Creating..." : "Create Short URL"}
-        </button>
+        </div>
+
+        <div className='form-group'>
+          
+            <label htmlFor="hoursToExpire">Expiry Hours (Optional)</label>
+          
+            <input
+                className="dashboard-input"
+                type="number"
+                placeholder="Expiry Hours (Optional)"
+                value={hoursToExpire}
+                onChange={(e) => setHoursToExpire(e.target.value)}
+                id="hoursToExpire"
+            />
+
+        </div>
+          
+
+          <button className="auth-button primary-btn create-button" type="submit" disabled={creatingUrl}>
+            {creatingUrl ? "Creating..." : "Create Short URL"}
+          </button>
 
       </form>
 
-      {shortUrl && (
-          <div className="result-card">
-            <h3>Your Short URL</h3>
+      {shortUrl && showResult && (
+          <div className="success-banner">
 
-            <a href={shortUrl} target="_blank" rel="noreferrer">{shortUrl}</a>
+              <div className="success-header">
 
-            <div style={{ marginTop: "15px" }}>
-                
-                <button
-                  className="auth-button"
-                  type="button"
-                  onClick={copyToClipboard}
-                >
-                  Copy URL
-                </button>
+                <div>
+
+                    <h3>
+                        <Gift size="32" color="currentColor" variant="Bold" style={{ marginRight: "10px" }} />
+                        Short URL Created Successfully!
+                    </h3>
+                    <p>Your Link is ready to use!</p>
+                  
+                </div>
+
+                <button className="close-success" type="button" onClick={() => setShowResult(false)}>
+                    <CloseCircle size="24" color='currentColor' variant='bold'/>
+                </button>  
+
+              </div>
+
+              <div className='success-link'>
+
+                  <a href={shortUrl} target="_blank" rel="noreferrer">{shortUrl}</a>
+
+              </div>
+                  
+              <div className="success-actions">
+                      
+                  <button 
+                      className='auth-button'
+                      type='button'
+                      onClick={() => window.open(shortUrl, "_blank")}
+                  >
+                      Open
+                  </button>
+
+                  <button
+                    className="auth-button primary-btn"
+                    type="button"
+                    onClick={() => copyToClipboard(shortUrl, "Short URL copied to clipboard successfully!")}
+                  >
+                      Copy URL
+                  </button>
+                  
+              </div>
             
-            </div>
-          
           </div>
 
         )}
@@ -139,4 +181,4 @@ const CreateUrlForm = ({ loadMyURLs, loadDashboardStats, creatingUrl, setCreatin
   );
 }
 
-export default CreateUrlForm
+export default React.memo(CreateUrlForm);

@@ -1,0 +1,242 @@
+.action-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border: none;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    transition:
+        background-color .25s ease,
+        color .25s ease,
+        transform .2s ease,
+        box-shadow .25s ease;
+
+    flex-shrink: 0;
+
+}
+
+.action-small {
+
+    width: 32px;
+
+    height: 32px;
+
+}
+
+.action-medium {
+
+    width: 38px;
+
+    height: 38px;
+
+}
+
+.action-large {
+
+    width: 46px;
+
+    height: 46px;
+
+}
+
+.action-full-width {
+
+    width: 100%;
+
+}
+
+.action-view {
+
+    color: var(--action-view);
+
+    background: var(--action-view-bg);
+
+}
+
+.action-edit {
+
+    color: var(--action-edit);
+
+    background: var(--action-edit-bg);
+
+}
+
+.action-delete {
+
+    color: var(--action-delete);
+
+    background: var(--action-delete-bg);
+
+}
+
+.action-copy {
+
+    color: var(--action-copy);
+
+    background: var(--action-copy-bg);
+
+}
+
+.action-qr {
+
+    color: var(--action-qr);
+
+    background: var(--action-qr-bg);
+
+}
+
+.action-promote {
+
+    color: var(--action-promote);
+
+    background: var(--action-promote-bg);
+
+}
+
+.action-demote {
+
+    color: var(--action-demote);
+
+    background: var(--action-demote-bg);
+
+}
+
+.action-analytics {
+
+    color: var(--action-analytics);
+
+    background: var(--action-analytics-bg);
+
+}
+
+.action-primary {
+
+    color: white;
+
+    background: var(--primary-color);
+
+}
+
+.action-secondary {
+
+    color: var(--text-primary);
+
+    background: var(--hover-bg);
+}
+
+.action-promote {
+
+    color: var(--action-promote);
+
+    background: var(--action-promote-bg);
+
+}
+
+.action-demote {
+
+    color: var(--action-demote);
+
+    background: var(--action-demote-bg);
+
+}
+
+.action-download {
+
+    color: var(--action-download);
+
+    background: var(--action-download-bg);
+
+}
+
+.action-share {
+
+    color: var(--action-share);
+
+    background: var(--action-share-bg);
+
+}
+
+.action-archive {
+
+    color: var(--action-archive);
+
+    background: var(--action-archive-bg);
+
+}
+
+.action-restore {
+
+    color: var(--action-restore);
+
+    background: var(--action-restore-bg);
+
+}
+
+.action-btn:hover:not(:disabled) {
+
+    transform:translateY(-2px);
+
+    filter:brightness(1.04);
+
+    box-shadow:0 10px 22px rgba(0,0,0,.16);
+
+
+}
+
+.action-btn:active:not(:disabled) {
+
+    transform: scale(.95);
+
+}
+
+.action-btn:disabled {
+
+    opacity: .55;
+
+    cursor: not-allowed;
+
+    transform: none;
+
+    box-shadow: none;
+
+}
+
+.action-loader {
+
+    width: 16px;
+
+    height: 16px;
+
+    border: 2px solid currentColor;
+
+    border-top-color: transparent;
+
+    border-radius: 50%;
+
+    animation: actionSpin .7s linear infinite;
+
+}
+
+
+@keyframes actionSpin {
+
+    from {
+
+        transform: rotate(0deg);
+
+    }
+
+    to {
+
+        transform: rotate(360deg);
+
+    }
+
+}

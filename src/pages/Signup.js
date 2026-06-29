@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Lock, Sms, User } from "iconsax-react";
-import AuthInput from "../components/AuthInput";
+import AuthInput from "../components/common/AuthInput/AuthInput.js";
 import { signupUser } from "../Api/AuthApi";
 import { toast } from "react-toastify";
 

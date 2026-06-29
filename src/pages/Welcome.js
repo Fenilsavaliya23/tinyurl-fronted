@@ -14,7 +14,7 @@ function Welcome() {
 
     try {
       const user = JSON.parse(raw);
-      setName(user.name || user.email || "User");
+      setName(user.username || "User");
     } catch (error) {
       navigate("/login");
     }

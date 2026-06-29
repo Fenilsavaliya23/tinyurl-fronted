@@ -1,27 +1,43 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense, lazy } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Moon, Sun1 } from "iconsax-react";
 import "./App.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ForgotPassword from "./pages/ForgotPassword";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
 import Welcome from "./pages/Welcome";
-import Dashboard from "./pages/Dashboard";
+import PageLoader from "./components/common/PageLoader/PageLoader";
+
+import SystemAnalytics from "./pages/SystemAnalytics";
+import { THEMES } from "./utils/constants";
 
 function App() {
+    
+  const Login = lazy(() => import("./pages/Login"));
+
+  const Signup = lazy(() => import("./pages/Signup"));
+
+  const Dashboard = lazy(() => import("./pages/Dashboard"));
+
+  const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
+
+  const UserManagement = lazy(() => import("./pages/UserManagement"));
+
+  const UrlManagement = lazy(() => import("./pages/UrlManagement"));
+
+  
   const [theme, setTheme] = useState(() => {
+  
     const savedTheme = localStorage.getItem("theme");
 
-    if (savedTheme === "light" || savedTheme === "dark") {
+    if (savedTheme === THEMES.LIGHT || savedTheme === THEMES.DARK) {
       return savedTheme;
     }
 
     return window.matchMedia &&
       window.matchMedia("(prefers-color-scheme: light)").matches
-      ? "light"
-      : "dark";
+      ? THEMES.LIGHT
+      : THEMES.DARK;
   });
 
   useEffect(() => {
@@ -29,17 +45,18 @@ function App() {
     localStorage.setItem("theme", theme);
   }, [theme]);
 
-  const isDarkMode = theme === "dark";
+  const isDarkMode = theme === THEMES.DARK;
 
   return (
+    
     <BrowserRouter>
       <div className="app-shell" data-theme={theme}>
         <button
           type="button"
           className="theme-toggle"
-          onClick={() => setTheme(isDarkMode ? "light" : "dark")}
-          aria-label={`Switch to ${isDarkMode ? "light" : "dark"} mode`}
-          title={`Switch to ${isDarkMode ? "light" : "dark"} mode`}
+          onClick={() => setTheme(isDarkMode ? THEMES.LIGHT : THEMES.DARK)}
+          aria-label={`Switch to ${isDarkMode ? THEMES.LIGHT : THEMES.DARK} mode`}
+          title={`Switch to ${isDarkMode ? THEMES.LIGHT : THEMES.DARK} mode`}
         >
           <span
             key={theme}
@@ -55,23 +72,35 @@ function App() {
             {isDarkMode ? "Light" : "Dark"}
           </span>
         </button>
-        <Routes>
-          <Route path="/" element={<Navigate to="/login" replace />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/welcome" element={<Welcome />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-        </Routes>
+       
+        <Suspense fallback={<PageLoader />}>
+        
+          <Routes>
+            <Route path="/" element={<Navigate to="/login" replace />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/welcome" element={<Welcome />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="admin/urls" element={<UrlManagement />} />
+            <Route path="/admin/users" element={<UserManagement />} />
+            <Route path="/admin/analytics" element={<SystemAnalytics />} />
+          </Routes>
+
+        </Suspense>  
 
         <ToastContainer
           position="top-right"
-          autoClose={2500}
-          theme="dark"
-        />
+          autoClose={2000}
+          theme={theme}
+        /> 
 
-      </div>
-    </BrowserRouter>
+        {/* <TestBadge /> */}
+      </div>  
+    </BrowserRouter> 
+
+    
   );
 }
 

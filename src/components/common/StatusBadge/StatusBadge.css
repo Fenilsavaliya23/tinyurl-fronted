@@ -1,0 +1,176 @@
+.status-badge {
+    display: inline-flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    border-radius: 999px;
+
+    gap: 6px;
+
+    font-weight: 600;
+
+    letter-spacing: .4px;
+
+    white-space: nowrap;
+
+    user-select: none;
+
+    border: 1px solid transparent;
+
+    transition:
+        background-color .25s ease,
+        color .25s ease,
+        border-color .25s ease,
+        transform .2s ease,
+        box-shadow .25s ease;
+    
+}
+
+.status-icon {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+}
+
+.status-small {
+
+    padding: 3px 10px;
+
+    font-size: 11px;
+
+}
+
+.status-medium {
+
+    min-width:88px;
+
+    justify-content:center;
+
+    padding:6px 16px;
+
+    font-size:12px;
+}
+
+.status-large {
+
+    padding: 7px 18px;
+
+    font-size: 14px;
+
+}
+
+.status-admin {
+
+    color: var(--danger-color);
+
+    background: var(--danger-bg);
+
+    border-color: var(--danger-border);
+
+}
+
+.status-user {
+
+    color: var(--primary-color);
+
+    background: var(--primary-light-bg);
+
+    border-color: var(--primary-light-border);
+
+}
+
+.status-active {
+
+    color: var(--success-color);
+
+    background: var(--success-bg);
+
+    border-color: var(--success-border);
+
+}
+
+.status-inactive {
+
+    color: var(--text-secondary);
+
+    background: var(--secondary-bg);
+
+    border-color: var(--secondary-border);
+
+}
+
+.status-expired {
+
+    color: var(--danger-color);
+
+    background: var(--danger-bg);
+
+    border-color: var(--danger-border);
+
+}
+
+.status-success {
+
+    color: var(--success-color);
+
+    background: var(--success-bg);
+
+    border-color: var(--success-border);
+
+}
+
+.status-error {
+
+    color: var(--danger-color);
+
+    background: var(--danger-bg);
+
+    border-color: var(--danger-border);
+
+}
+
+.status-warning {
+
+    color: var(--warning-color);
+
+    background: var(--warning-bg);
+
+    border-color: var(--warning-border);
+
+}
+
+.status-info {
+
+    color: var(--info-color);
+
+    background: var(--info-bg);
+
+    border-color: var(--info-border);
+
+}
+
+.status-default {
+
+    color: var(--text-secondary);
+
+    background: var(--hover-bg);
+
+    border-color: var(--border-color);
+
+}
+
+.status-badge:hover {
+
+    transform:translateY(-1px);
+
+    filter:brightness(1.03);
+
+}

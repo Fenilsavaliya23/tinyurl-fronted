@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Lock, Sms } from "iconsax-react";
-import AuthInput from "../components/AuthInput";
+import AuthInput from "../components/common/AuthInput/AuthInput.js";
 import { loginUser } from "../Api/AuthApi";
 import { toast } from "react-toastify";
 
@@ -38,11 +38,19 @@ function Login() {
       sessionStorage.setItem(
         "currentUser",
         JSON.stringify({
-          email: form.email.trim(),
+          username: response.username,
+          email: response.email,
+          role: response.role
         })
       );
 
       sessionStorage.setItem("jwtToken", response.token);
+
+      // console.log(
+      //   JSON.parse(
+      //     sessionStorage.getItem("currentUser")
+      //   )
+      // );
 
       // alert(response.message);
       toast.success(response.message);

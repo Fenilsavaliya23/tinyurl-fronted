@@ -66,17 +66,35 @@ function StatisticsSection({ creatingUrl, setCreatingUrl }) {
 
                     <h3>Statistics</h3>
 
-                    <p> <strong> Original URL: </strong>{" "}{stats.originalUrl} </p>
+                    <div className='statistics-row'>
+                        <span>Original URL: </span> 
+                        <strong>{" "}{stats.originalUrl} </strong>
+                    </div>
 
-                    <p> <strong> Short URL: </strong>{" "}{stats.shortUrl} </p>
+                    <div className='statistics-row'>
+                        <span>Short URL: </span> 
+                        <strong>{" "}{stats.shortUrl} </strong>
+                    </div>
 
-                    <p> <strong> Total Clicks: </strong>{" "}{stats.clickCount} </p>
+                    <div className='statistics-row'>
+                        <span>Total Clicks: </span> 
+                        <strong>{" "}{stats.clickCount} </strong>
+                    </div>
 
-                    <p> <strong> Created Date: </strong>{" "}{stats.createdDate} </p>
+                    <div className='statistics-row'>
+                        <span>Created Date: </span> 
+                        <strong>{" "}{stats.createdDate} </strong>
+                    </div>
 
-                    <p> <strong> Last Accessed: </strong>{" "}{stats.lastAccessedAt || "Never"} </p>
+                    <div className='statistics-row'>
+                        <span>Last Accessed: </span> 
+                        <strong>{" "}{stats.lastAccessedAt || "Never"} </strong>
+                    </div>
 
-                    <p> <strong> Expiration Date: </strong>{" "}{stats.expirationDate || "No Expiry"} </p>
+                    <div className='statistics-row'>
+                        <span>Expiration Date: </span> 
+                        <strong>{" "}{stats.expirationDate || "No Expiry"} </strong>
+                    </div>
 
                 </div>
 
@@ -89,4 +107,4 @@ function StatisticsSection({ creatingUrl, setCreatingUrl }) {
     );
 }
 
-export default StatisticsSection;
+export default React.memo(StatisticsSection);

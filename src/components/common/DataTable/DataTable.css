@@ -1,0 +1,148 @@
+.datatable-wrapper {
+
+    width:100%;
+
+    overflow:auto;
+
+    border-radius:22px;
+
+    background:var(--card-bg);
+
+    border:1px solid var(--card-border);
+
+    box-shadow:var(--card-shadow);
+
+    transition:
+        border-color .25s ease,
+        box-shadow .25s ease,
+        background-color .25s ease;
+
+}
+
+
+.datatable {
+
+   width:100%;
+
+    min-width:920px;
+
+    border-collapse:separate;
+
+    border-spacing:0;
+}
+
+.datatable thead {
+
+    position:sticky;
+
+    top:0;
+
+    z-index:10;
+
+    background:var(--table-header-bg);
+
+}
+
+.datatable th {
+
+    position:sticky;
+
+    top:0;
+
+    z-index:5;
+
+    padding:18px 22px;
+
+    background:var(--table-header-bg);
+
+    color:var(--text-secondary);
+
+    font-size:12px;
+
+    font-weight:700;
+
+    letter-spacing:.08em;
+
+    text-transform:uppercase;
+
+    border-bottom:1px solid var(--table-border);
+
+}
+
+.datatable td {
+
+    padding:20px 22px;
+
+    color:var(--text-primary);
+
+    border-bottom:1px solid var(--table-border);
+
+    vertical-align:middle;
+}
+
+.datatable tbody tr:nth-child(even){
+
+    background:var(--table-alt-row);
+
+}
+
+.datatable tbody tr:last-child td {
+
+    border-bottom: none;
+
+}
+
+.datatable tbody tr {
+
+   transition:
+        background-color .25s ease,
+        transform .18s ease;
+
+}
+
+.datatable tbody tr:hover {
+
+    background: var(--hover-bg);
+
+}
+
+.datatable-loading,
+.datatable-empty {
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    min-height:260px;
+
+    font-size:17px;
+
+    color:var(--text-secondary);
+}
+
+@media (max-width: 768px) {
+
+    .datatable th,
+    .datatable td {
+
+        padding: 14px;
+
+        font-size: 14px;
+
+    }
+
+     .datatable{
+
+        min-width:760px;
+
+    }
+
+    .datatable-wrapper{
+
+        border-radius:18px;
+
+    }
+
+}

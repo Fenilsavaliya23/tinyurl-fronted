@@ -1,0 +1,15 @@
+.page-loader{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    height:100vh;
+
+    background:var(--page-bg);
+
+    color:var(--text-primary);
+
+}

@@ -1,28 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { getMyUrls, deleteUrl, updateAlias, getDashboardStats, getQrCodeUrl, getQrCode } from "../Api/urlApi";
 import "./Dashboard.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import AnalyticsCards from "../components/Dashboard/AnalyticsCards";
 import UrlTable from "../components/Dashboard/UrlTable";
-import QrModel from "../components/Dashboard/QrModel";
 import CreateUrlForm from "../components/Dashboard/CreateUrlForm";
 import StatisticsSection from "../components/Dashboard/StatisticsSection";
 // import Navbar from "../components/Layout/Navbar";
 import Sidebar from "../components/Layout/Sidebar";
 
 function Dashboard() {
-  // const [longUrl, setLongUrl] = useState("");
-  // const [customAlias, setCustomAlias] = useState("");
-  // const [hoursToExpire, setHoursToExpire] = useState("");
-
-  // const [shortUrl, setShortUrl] = useState("");
-  // const [selectedQrCodeUrl, setSelectedQrCodeUrl] = useState("");
 
   const [creatingUrl, setCreatingUrl] = useState(false);
-  const [loadingStats, setLoadingStats] = useState(false);
 
-  const [checkCode, setCheckCode] = useState("");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   const [dashboardStats, setDashboardStats] = useState(null);
 
@@ -32,9 +26,17 @@ function Dashboard() {
 
   const [qrImageUrl, setQrImageUrl] = useState("");
 
+  const [activeSection, setActiveSection] = useState("");
+
   const [myURLs, setMyURLs] = useState([]);
 
-  const navigate = useNavigate();
+  const location = useLocation();
+
+  const analyticsRef = React.useRef(null);
+
+  const myUrlsRef = React.useRef(null);
+
+  const overviewRef = React.useRef(null);
 
   useEffect(() => {
 
@@ -43,17 +45,184 @@ function Dashboard() {
 
   }, []);
 
+  useEffect(() => {
+
+      if (sidebarOpen) {
+        document.body.style.overflow = "hidden";
+      } 
+
+      else {
+        document.body.style.overflow = "";
+      }
+
+      return () => {
+        document.body.style.overflow = "";
+      };
+
+  }, [sidebarOpen]);
+
+  useEffect(() => {
+
+      const handleEscape = (event) => {
+
+        if (event.key === "Escape") {
+
+            setSidebarOpen(false);
+
+        }
+
+      };
+
+      window.addEventListener("keydown", handleEscape);
+
+      return () => {
+
+        window.removeEventListener("keydown", handleEscape);
+
+      };
+
+  }, []);
+
+  useEffect(() => {
+
+      const handleResize = () => {
+
+          if (window.innerWidth >= 992) {
+
+              setSidebarOpen(false);
+
+          }
+
+      };
+
+      window.addEventListener("resize", handleResize);
+
+      return () => {
+
+          window.removeEventListener("resize", handleResize);
+
+      };
+
+  }, []);
+
+  useEffect(() => {
+
+      switch (location.hash) {
+
+          case "#analytics":
+
+              analyticsRef.current?.scrollIntoView({
+
+                  behavior: "smooth",
+
+                  block: "start"
+
+              });
+
+              break;
+
+          case "#my-urls":
+
+              myUrlsRef.current?.scrollIntoView({
+
+                  behavior: "smooth",
+
+                  block: "start"
+
+              });
+
+              break;
+
+          default:
+
+              break;
+
+      }
+
+  }, [location]);
+
+
+  useEffect(() => {
+
+    const observer = new IntersectionObserver(
+
+        (entries) => {
+
+            entries.forEach((entry) => {
+
+                if (entry.isIntersecting) {
+
+                    const sectionId = entry.target.id;
+
+                    if(sectionId === "analytics-section" || sectionId === "my-urls-section") {
+
+                        setActiveSection(sectionId);
+                    }
+                    
+                    else{
+                        setActiveSection("");
+                    }
+                    
+                    const hash = `#${sectionId.replace("-section", "")}`;
+
+                    if (window.location.hash !== hash) {
+
+                        window.history.replaceState(
+                            null,
+                            "",
+                            hash
+                        );
+
+                    } 
+                }
+
+            });
+
+        },
+
+        {
+
+            threshold: 0.35,
+
+        }
+
+    );
+
+    if (overviewRef.current) {
+        observer.observe(overviewRef.current);
+    }
+
+    if (analyticsRef.current) {
+
+        observer.observe(analyticsRef.current);
+
+    }
+
+    if (myUrlsRef.current) {
+
+        observer.observe(myUrlsRef.current);
+
+    }
+
+    return () => {
+
+        observer.disconnect();
+
+    };
+
+}, []);
+
 
   const loadDashboardStats = async () => {
 
     try {
+      
       const response = await getDashboardStats();
 
       setDashboardStats(response);
     }
     catch (error) {
       console.error(error);
-      // alert("Failed to load dashboard statistics");
       toast.error("Failed to load dashboard statistics");
     }
 
@@ -79,68 +248,79 @@ function Dashboard() {
 
     return urls.filter(url =>
       url.originalUrl.toLowerCase().includes(searchTerm.toLowerCase()) 
-      //  || url.shortUrl.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }
 
 
   return (
-    <main className="dashboard-container">
+    
+    <>
 
-      <Sidebar />
+      {sidebarOpen && (<div className="sidebar-overlay" onClick={() => setSidebarOpen(false)} /> )}
 
-      <section className="dashboard-main">
-        
-        {/* <Navbar /> */}
+      <Sidebar 
+          isOpen={sidebarOpen} 
+          isCollapsed={sidebarCollapsed}
+          onCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
+          activeSection={activeSection}
+          onClose={() => setSidebarOpen(false)} 
+      />
 
-        <AnalyticsCards dashboardStats={dashboardStats} />
+      <main className="dashboard-container">
 
-        <div className="dashboard-grid">
-
-          <CreateUrlForm loadMyURLs={loadMyURLs} loadDashboardStats={loadDashboardStats} creatingUrl={creatingUrl} setCreatingUrl={setCreatingUrl} />
-        
-         <StatisticsSection creatingUrl={creatingUrl} setCreatingUrl={setCreatingUrl} />
-        
-        </div>
-
-        <div className="urls-card">
-
-            <div className="urls-header">
-
-               <h2>My URLs</h2>
-
-               <span className="urls-count">
-
-                {filterResults(myURLs, searchTerm).length} {filterResults(myURLs, searchTerm).length === 1 ? "URL" : "URLs"}
-
-               </span>
-
-            </div>
-
-            <div className="urls-search">
-
-                <input type="text" placeholder="Search Urls...." 
-                    className="search-input" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} 
-                />
-
-            </div>            
-      
-            <UrlTable
-                myURLs={filterResults(myURLs, searchTerm)}
-                loadMyURLs={loadMyURLs}
-                loadDashboardStats={loadDashboardStats}
-                showQrCode={showQrCode}
-                setShowQrCode={setShowQrCode}
-                qrImageUrl={qrImageUrl}
-                setQrImageUrl={setQrImageUrl}
-            />
+        <section ref={overviewRef} className={`dashboard-main ${sidebarCollapsed ? 'collapsed' : ''}`} id="dashboard-section">
           
-        </div>
+          {/* <Navbar /> */}
 
-        <QrModel showQrCode={showQrCode} qrImageUrl={qrImageUrl} setShowQrCode={setShowQrCode} />
+          <section id="analytics-section" ref={analyticsRef}>
+              <AnalyticsCards dashboardStats={dashboardStats} />
+          </section>
 
-      </section>
-    </main>
+          <div className="dashboard-grid">
+
+            <CreateUrlForm loadMyURLs={loadMyURLs} loadDashboardStats={loadDashboardStats} creatingUrl={creatingUrl} setCreatingUrl={setCreatingUrl} />
+          
+            <StatisticsSection creatingUrl={creatingUrl} setCreatingUrl={setCreatingUrl} />
+          
+          </div>
+
+          <div id="my-urls-section" ref={myUrlsRef} className="urls-card">
+
+              <div className="urls-header">
+
+                <h2>My URLs</h2>
+
+                <span className="urls-count">
+
+                  {filterResults(myURLs, searchTerm).length} {filterResults(myURLs, searchTerm).length === 1 ? "URL" : "URLs"}
+
+                </span>
+
+              </div>
+
+              <div className="urls-search">
+
+                  <input type="text" placeholder="Search Urls...." 
+                      className="search-input" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} 
+                  />
+
+              </div>            
+        
+              <UrlTable
+                  myURLs={filterResults(myURLs, searchTerm)}
+                  loadMyURLs={loadMyURLs}
+                  loadDashboardStats={loadDashboardStats}
+                  showQrCode={showQrCode}
+                  setShowQrCode={setShowQrCode}
+                  qrImageUrl={qrImageUrl}
+                  setQrImageUrl={setQrImageUrl}
+              />
+            
+          </div>
+
+        </section>
+      </main>
+    </>
   );
 }
 
