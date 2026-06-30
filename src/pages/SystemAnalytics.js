@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getTopUsers, getTopUrls } from "../Api/adminApi";
 
-import Sidebar from "../components/Layout/Sidebar";
+import DashboardLayout from "../components/Layout/DashboardLayout.js";
 import "./Dashboard.css";
 
 import { Activity, Crown1, Profile2User, Link21 } from "iconsax-react";
@@ -29,11 +29,7 @@ function SystemAnalytics() {
     
     return(
 
-        <main className="dashboard-container">
-
-            <Sidebar />
-
-            <section className="dashboard-main">
+        <DashboardLayout>
 
                 <div className="analytics-section">
 
@@ -129,11 +125,7 @@ function SystemAnalytics() {
 
                 </div>
 
-            </section>
-
-
-        </main>
-
+        </DashboardLayout> 
     )
 
 }

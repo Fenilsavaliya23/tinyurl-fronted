@@ -7,17 +7,12 @@ import AnalyticsCards from "../components/Dashboard/AnalyticsCards";
 import UrlTable from "../components/Dashboard/UrlTable";
 import CreateUrlForm from "../components/Dashboard/CreateUrlForm";
 import StatisticsSection from "../components/Dashboard/StatisticsSection";
+import DashboardLayout from "../components/Layout/DashboardLayout";
 // import Navbar from "../components/Layout/Navbar";
-import Sidebar from "../components/Layout/Sidebar";
-import { MenuBoard } from "iconsax-react";
 
 function Dashboard() {
 
   const [creatingUrl, setCreatingUrl] = useState(false);
-
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   const [dashboardStats, setDashboardStats] = useState(null);
 
@@ -46,65 +41,6 @@ function Dashboard() {
 
   }, []);
 
-  useEffect(() => {
-
-      if (sidebarOpen) {
-        document.body.style.overflow = "hidden";
-      } 
-
-      else {
-        document.body.style.overflow = "";
-      }
-
-      return () => {
-        document.body.style.overflow = "";
-      };
-
-  }, [sidebarOpen]);
-
-  useEffect(() => {
-
-      const handleEscape = (event) => {
-
-        if (event.key === "Escape") {
-
-            setSidebarOpen(false);
-
-        }
-
-      };
-
-      window.addEventListener("keydown", handleEscape);
-
-      return () => {
-
-        window.removeEventListener("keydown", handleEscape);
-
-      };
-
-  }, []);
-
-  useEffect(() => {
-
-      const handleResize = () => {
-
-          if (window.innerWidth >= 992) {
-
-              setSidebarOpen(false);
-
-          }
-
-      };
-
-      window.addEventListener("resize", handleResize);
-
-      return () => {
-
-          window.removeEventListener("resize", handleResize);
-
-      };
-
-  }, []);
 
   useEffect(() => {
 
@@ -255,90 +191,64 @@ function Dashboard() {
 
   return (
     
-    <>
+        <DashboardLayout activeSection={activeSection}>
 
-      {sidebarOpen && (<div className="sidebar-overlay" onClick={() => setSidebarOpen(false)} /> )}
-
-        
-      {!sidebarOpen && (
-          <button
-              className="sidebar-toggle"
-              onClick={() => setSidebarOpen(true)}
-              aria-label="Open Sidebar"
-          >
-              <MenuBoard
-                  size={24}
-                  variant="Bold"
-                  color="currentColor"
-              />
-          </button>
-      )}
       
+            <section ref={overviewRef} id="dashboard-section">
 
-      <Sidebar 
-          isOpen={sidebarOpen} 
-          isCollapsed={sidebarCollapsed}
-          onCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
-          activeSection={activeSection}
-          onClose={() => setSidebarOpen(false)} 
-      />
-
-
-      <main className="dashboard-container">
-
-        <section ref={overviewRef} className={`dashboard-main ${sidebarCollapsed ? 'collapsed' : ''}`} id="dashboard-section">
-          
-          {/* <Navbar /> */}
-
-          <section id="analytics-section" ref={analyticsRef}>
-              <AnalyticsCards dashboardStats={dashboardStats} />
-          </section>
-
-          <div className="dashboard-grid">
-
-            <CreateUrlForm loadMyURLs={loadMyURLs} loadDashboardStats={loadDashboardStats} creatingUrl={creatingUrl} setCreatingUrl={setCreatingUrl} />
-          
-            <StatisticsSection creatingUrl={creatingUrl} setCreatingUrl={setCreatingUrl} />
-          
-          </div>
-
-          <div id="my-urls-section" ref={myUrlsRef} className="urls-card">
-
-              <div className="urls-header">
-
-                <h2>My URLs</h2>
-
-                <span className="urls-count">
-
-                  {filterResults(myURLs, searchTerm).length} {filterResults(myURLs, searchTerm).length === 1 ? "URL" : "URLs"}
-
-                </span>
-
-              </div>
-
-              <div className="urls-search">
-
-                  <input type="text" placeholder="Search Urls...." 
-                      className="search-input" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} 
-                  />
-
-              </div>            
-        
-              <UrlTable
-                  myURLs={filterResults(myURLs, searchTerm)}
-                  loadMyURLs={loadMyURLs}
-                  loadDashboardStats={loadDashboardStats}
-                  showQrCode={showQrCode}
-                  setShowQrCode={setShowQrCode}
-                  qrImageUrl={qrImageUrl}
-                  setQrImageUrl={setQrImageUrl}
-              />
             
-          </div>
+                {/* <Navbar /> */}
 
-        </section>
-      </main>
-    </>
+                <section id="analytics-section" ref={analyticsRef}>
+                    <AnalyticsCards dashboardStats={dashboardStats} />
+                </section>
+
+                <div className="dashboard-grid">
+
+                    <CreateUrlForm loadMyURLs={loadMyURLs} loadDashboardStats={loadDashboardStats} creatingUrl={creatingUrl} setCreatingUrl={setCreatingUrl} />
+                
+                    <StatisticsSection creatingUrl={creatingUrl} setCreatingUrl={setCreatingUrl} />
+                
+                </div>
+
+                <div id="my-urls-section" ref={myUrlsRef} className="urls-card">
+
+                    <div className="urls-header">
+
+                        <h2>My URLs</h2>
+
+                        <span className="urls-count">
+
+                        {filterResults(myURLs, searchTerm).length} {filterResults(myURLs, searchTerm).length === 1 ? "URL" : "URLs"}
+
+                        </span>
+
+                    </div>
+
+                    <div className="urls-search">
+
+                        <input type="text" placeholder="Search Urls...." 
+                            className="search-input" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} 
+                        />
+
+                    </div>            
+                
+                    <UrlTable
+                        myURLs={filterResults(myURLs, searchTerm)}
+                        loadMyURLs={loadMyURLs}
+                        loadDashboardStats={loadDashboardStats}
+                        showQrCode={showQrCode}
+                        setShowQrCode={setShowQrCode}
+                        qrImageUrl={qrImageUrl}
+                        setQrImageUrl={setQrImageUrl}
+                    />
+                    
+                </div>
+
+            </section>
+
+      </DashboardLayout>
+
   );
 }
 

@@ -7,9 +7,9 @@ import { createdUrlManagementTableColumns } from "../components/Dashboard/column
 import { formatDate } from "../utils/formatters.js";
 import { TABLE_MESSAGES } from "../utils/constants.js";
 import DataTable from "../components/common/DataTable/DataTable.js";
+import DashboardLayout from "../components/Layout/DashboardLayout.js";
 import useApi from "../hooks/useApi.js";
 import "./Dashboard.css";
-// import  StatusBadge  from "../components/common/StatusBadge/StatusBadge";
 import {
     Link21,
     People,
@@ -130,12 +130,7 @@ function UrlManagement() {
 
     return (
 
-        <main className="dashboard-container">
-
-            <Sidebar />
-
-            <section className="dashboard-main">
-
+        <DashboardLayout>
 
                 <div className="user-page-header">
 
@@ -344,8 +339,7 @@ function UrlManagement() {
                        
                 </div>
 
-
-            </section>   
+ 
 
             <DeleteConfirmModal
                 isOpen={deleteModalOpen}
@@ -366,7 +360,7 @@ function UrlManagement() {
                 confirmText="Delete URL"
             /> 
 
-        </main>
+        </DashboardLayout>
 
     )
 

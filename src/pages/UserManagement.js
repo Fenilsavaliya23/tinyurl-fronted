@@ -6,6 +6,7 @@ import { createUserManagementTableColumns } from "../components/Dashboard/column
 import { toast } from "react-toastify";
 import { ROLES } from "../utils/constants";
 import useApi from "../hooks/useApi";
+import DashboardLayout from "../components/Layout/DashboardLayout";
 import "./Dashboard.css";
 import DataTable from "../components/common/DataTable/DataTable";
 
@@ -175,11 +176,7 @@ function UserManagement() {
 
     return (
 
-        <main className="dashboard-container">
-
-            <Sidebar />
-
-            <section className="dashboard-main">
+       <DashboardLayout>
 
                 <div className="user-page-header">
 
@@ -348,8 +345,7 @@ function UserManagement() {
                     )}
 
                 </div>
-
-            </section>    
+  
 
             <DeleteConfirmModal
                 isOpen={deleteModalOpen}
@@ -386,8 +382,7 @@ function UserManagement() {
             />        
 
                     
-
-        </main>
+        </DashboardLayout>
 
     )
 

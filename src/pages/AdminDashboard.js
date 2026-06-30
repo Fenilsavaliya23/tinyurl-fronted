@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getAdminDashboard, getAllUsers } from '../Api/adminApi';
 import { isAdmin } from '../utils/helper';
-import Sidebar from "../components/Layout/Sidebar"
+import DashboardLayout from '../components/Layout/DashboardLayout';
 import "./Dashboard.css"
 
 import {
@@ -91,11 +91,7 @@ function AdminDashboard() {
 
     return(
 
-        <main className="dashboard-container">
-            
-            <Sidebar />
-
-            <section className="dashboard-main">
+        <DashboardLayout> 
 
                 <div className="user-page-header">
                
@@ -282,9 +278,7 @@ function AdminDashboard() {
 
                 </div>
 
-            </section>
-
-        </main>        
+        </DashboardLayout>       
 
     ) 
 

@@ -187,7 +187,7 @@ const Sidebar = ({ isOpen, onClose, isCollapsed, onCollapse, activeSection }) =>
             <div className="sidebar-dashboard-group">
 
                 <button className={isDashboardPage ? "sidebar-item active" : "sidebar-item"} 
-                    onClick={() => setShowDashboardMenu(!showDashboardMenu)} data-tooltip="Dashboard" aria-label="Dashboard"
+                    onClick={isCollapsed ? () => handleNavigation("/dashboard") : () => setShowDashboardMenu(!showDashboardMenu)} data-tooltip="Dashboard" aria-label="Dashboard"
                 >
                     
                     <div className="sidebar-icon">
