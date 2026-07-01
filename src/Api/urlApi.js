@@ -1,6 +1,6 @@
 import axios from "./axiosConfig";
 
-const BASE_URL = "http://localhost:8080/api/v1/url";
+const BASE_URL = "https://tinyurl-backend-nv4d.onrender.com/api/v1/url";
 
 export const shortenUrl = async (requestData) => {
 

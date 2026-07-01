@@ -1,6 +1,6 @@
 import axiosInstance from "./axiosConfig";
 
-const BASE_URL = "http://localhost:8080/api/admin";
+const BASE_URL = "https://tinyurl-backend-nv4d.onrender.com/api/admin";
 
 export const getAdminDashboard = async () => {
     
