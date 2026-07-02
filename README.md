@@ -240,10 +240,6 @@ Logout
 
 ---
 
-# 📸 Screenshots
-
-> Add screenshots here after deployment.
-
 ### Login Page
 
 ```
